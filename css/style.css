@@ -4,7 +4,7 @@ html {
 	background: black; 
 	color: white; 
 	font-size: 16px; 
-	font-family: monospace; 
+	font-family: "Anonymous Pro", "Anonymous", monospace; 
 	border-color: white;
 	padding-bottom: 20px;
 }
@@ -344,7 +344,8 @@ menu .panel:last-child  { border-right: 0px none; }
 /* Nest Folding */
 
 .folded > .node		{ height: 0px; overflow: hidden; }
-.folded				{ border-bottom: 1px dotted white; }
+.object.folded,
+.array.folded		{ border-bottom: 1px dotted white; }
 .folded .folded 	{ border-bottom: 0px; }
 
 .ellipsis			{ display: none; }

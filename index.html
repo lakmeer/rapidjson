@@ -195,13 +195,26 @@
 
 		</script>
 
-
-
-		<script src="js\domsole.js"></script>
-		<script src="js\keymaps.js"></script>
+		<!-- Load various components -->
+		<script src="js\domsole.js"  ></script>
+		<script src="js\keymaps.js"  ></script>
 		<script src="js\rapidjson.js"></script>
-		<script src="js\metatree.js"></script>
+		<script src="js\metatree.js" ></script>
+
+		<!-- Start the program proper -->
 		<script src="js\app.js"></script>
+
+		<script>
+
+			$(function () {
+
+				var app = new RapidJsonApp("#json");
+
+					app.loadJson(jsonData);
+
+			});
+
+		</script>
 
 	</body>
 </html>

@@ -210,11 +210,4 @@ var RapidJsonApp = function () {
 
 
 
-$(function () {
 
-	var app = new RapidJsonApp("#json");
-
-		app.loadJson(jsonData);
-
-				
-});

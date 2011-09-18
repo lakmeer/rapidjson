@@ -232,6 +232,8 @@ var JsonTree = function (_host) {
 		
 	}
 
+
+
 	/*
 	 * Handle keyboard input
 	 *
@@ -281,23 +283,33 @@ var JsonTree = function (_host) {
 			// Folding
 			case "foldThis":
 
-				//metaTree.fold();
+				$cursor.toggleClass('folded');
+				
 				break;
 
 			case "foldAll":
 
-				//metaTree.foldAll();
+				var $allChildNodes = $cursor.find('.node');
+
+				if ($cursor.hasClass('folded')) {
+
+					$allChildNodes.add($cursor).removeClass('folded');
+
+				} else {
+
+					$allChildNodes.add($cursor).addClass('folded');
+			
+				}
+
 				break;
 
 			// Editing
-			case "editValue":
-			case "editNextField":
+			case "editNext":
 
 				modifyField($cursor, "value");
 				break;
 			
-			case "editName":
-			case "editPrevField":
+			case "editPrev":
 
 				modifyField($cursor, "name");
 				break;
