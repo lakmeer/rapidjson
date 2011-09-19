@@ -40,6 +40,61 @@ var JsonTree = function (_host) {
 	}
 
 
+	// changeType - apply new type, but do relevant contextual checkin to perform appropriate transformations
+	function changeInto (_target, _newType) {
+	
+		trace.log('changeInto -> ' + _newType);
+
+		var $this = $(_target);
+
+		// Strip old types
+		$this.removeClass('object array string number true false null');
+
+		// Change into ...
+		switch (_newType) {
+
+			case "object":
+
+				$this.children('.value').html('{<span class="ellipsis"> . . . }</span>');
+		
+				$this.children('.node').each(function (_i) {
+
+					var $thisChild	= $(this),
+						$name		= $thisChild.children('.name');
+
+					$name.text(_i);
+
+				});
+
+				break;
+
+			case "array":
+
+				$this.children('.value').html('[<span class="ellipsis"> . . . ]</span>');
+				
+
+				break;
+
+			case "true":
+			case "false":
+			case "null":
+
+				$this.children(".value").html('<span class="icon">' + _newType + '</span>');
+				break;
+
+			default:
+
+				console.log("Become non-nesting node: delete all children, unfold if folded");
+
+
+		}
+
+		// Add new type
+		$this.addClass(_newType);
+
+	};
+
+
 
 	/*
 	 * Tests
@@ -101,15 +156,10 @@ var JsonTree = function (_host) {
 
 		console.log("Infertype: " + _value);
 
-		if (!options.typeguessing) { return false; }
-
 		var x = String(_value);
 
-		// Start by assuming a string
 		// if string is exactly true, false, or null, use primitives
-		if (x === 'null' ) { return 'null';  }
-		if (x === 'false') { return 'false'; }
-		if (x === 'true' ) { return 'true';  }
+		if (x === 'null' || x === 'false' || x === 'true' ) { return x;  }
 
 		// if the string contains ONLY numbers, it's probably a number
 		if (x.match(/^\d*$/)) { return 'number'; }
@@ -120,10 +170,9 @@ var JsonTree = function (_host) {
 
 		return 'string';
 
-		// TODO: Make node visually red on typeguessing failure
-
-
 	}
+
+
 
 
 	/*
@@ -304,14 +353,16 @@ var JsonTree = function (_host) {
 				break;
 
 			// Editing
-			case "editNext":
+			case "editNextField":
+			case "editValue":
 
-				modifyField($cursor, "value");
+				editValue();
 				break;
 			
-			case "editPrev":
+			case "editPrevField":
+			case "editName":
 
-				modifyField($cursor, "name");
+				editName();
 				break;
 			
 			// Node
@@ -409,6 +460,139 @@ var JsonTree = function (_host) {
 	}
 
 
+	/*
+	 *
+	 * Edit-by-text entry
+	 *
+	 * Editing either the key or value parts has thier own special considerations for
+	 * automagic type conversion and so on, so they are split into 2 functions.
+	 *
+	 * Some repetition here but really didn't like having one bit monolithic function
+	 * with loads of branches in it, so split it at the cost of repetitiveness, but 
+	 * may look at drying these up later on.
+	 *
+	 */
+
+
+	/*
+	 * editName
+	 *
+	 * Considerations for name field:
+	 *
+	 * If parent is an array but entered value is not numeric, force to an object
+	 * If parent is an array and entered value IS numeric, reorder the array for new values
+	 *
+	 */
+
+
+	function editName () {
+
+		// Get jq reference, create new textbox
+		var $this		= $cursor.children(".name"),
+			$textBox	= $("<input type='text' />").val($this.text());
+
+		// Attach
+		$this.addClass('modify').append( $textBox );
+		$textBox.focus().select();
+		
+		// Suspend keyboard
+		Keyboard.pause();
+
+		// save value, carry out implicit operations
+		function save () {
+			
+			var newName			= $textBox.val(),
+				inferredType	= inferType(newName);
+
+			// If parent is an array and new name is a string, force parent to be object
+			if ( inferredType !== 'number'	&&	$cursor.parent().hasClass('array') ) {
+
+				console.log("Parent is an array but name is a string -> convert of to object");
+
+				changeInto($cursor.parent(), 'object');
+
+			// If parent is array and new value is still a number, reorder elements based on new key values
+			} else if ( $this.parent().hasClass('array') ) {
+
+				$this.text($textBox.val());
+
+				console.log("Parent is an array and name is numeric -> reorder array for new numbering");
+
+			} else {
+
+				// Save value
+				$this.text($textBox.val());
+
+			}
+
+			// Close box
+			close();
+			
+		}
+
+		// close text entry box 
+		function close () {
+
+			// Dismiss box
+			$this.removeClass("modify");
+			$textBox.remove();
+
+			// Resume Keyboard
+			Keyboard.resume();
+
+		}
+
+		// get special keyboard input
+		function filterKeyPresses (_key) {
+
+			// Return (accept)
+			if (_key.keyCode === 13) {
+
+				save();
+			
+			// Shift-Tab (prev)
+			} else if (_key.keyCode === 9 && _key.shiftKey) {
+
+				save();
+				newCommand('moveToPrevAnything');
+				newCommand('editName');
+			
+			// Tab (next)
+			} else if (_key.keyCode === 9) {
+
+				save();
+				newCommand('moveToNextAnything');
+				newCommand('editValue');
+
+			// Escape (cancel)
+			} else if (_key.keyCode === 27) {
+
+				close();
+
+			} else {
+
+				return _key;
+				
+			}
+
+			_key.preventDefault();
+			return false;
+
+		}
+
+		// Bind key listener	
+		$textBox.bind('keydown', filterKeyPresses);
+
+		// Bind focus listener
+		$textBox.bind('blur', close);
+
+		// Bind click swallower
+		$textBox.bind('click', function () { return false; });
+
+	}
+
+
+
 
 	/*
 	 * Issue internal command
@@ -420,6 +604,7 @@ var JsonTree = function (_host) {
 		handleInput({ originalEvent : { cmd : _command } });
 
 	}
+
 
 
 	/*
@@ -434,115 +619,7 @@ var JsonTree = function (_host) {
 	}
 
 
-	/*
-	 * Modify values
-	 *
-	 */
-
-	function modifyField ($this, _target) {
-
-		var $field = $this.children("." + _target),
-			$textBox = $("<input type='text' />").val($field.text());
-
-		// TODO: This needs to be reconsidered properly
-		if ($this.parent().hasClass("array")) {
-			
-			$field = $this.find(".value");
-
-		}
-
-		$field.addClass('modify').append($textBox);
-		
-		$textBox.select().focus();
-		
-		Keyboard.pause();
-
-		$textBox.bind('keydown', function (_key) {
-
-			// Return (accept)
-			if (_key.keyCode === 13) {
-
-				$field.removeClass('modify');
-				$field.html($textBox.val());
-
-				Keyboard.resume();
-
-				setType($this, inferType( $textBox.val() ) );
-
-			// Tab (next)
-			} else if (_key.keyCode === 9) {
-
-				$field.removeClass('modify');
-				$field.html($textBox.val());
-				
-				// If going backwards and reached next node
-				if (_key.shiftKey && _target == "name") {
-
-					newCommand("moveToPrevAnything");
-					modifyField($cursor, "value");
-
-				// If going backwards but staying on this node
-				} else if (_key.shiftKey) {
-
-					modifyField($this, "name");
-
-				// If going forward and staying on this node
-				} else if (_target === "name") {
-
-					modifyField($this, "value");
-
-				// If going forward and mobing on to next node
-				} else {
-
-					newCommand("moveToNextAnything");
-					modifyField($cursor, "name");
-
-				}				
-			
-			// Escape (cancel)
-			} else if (_key.keyCode === 27) {
-
-				$textBox.blur();
-				Keyboard.resume();
-
-			} else {
-
-				return (_key);
-
-			}
-
-			_key.preventDefault();
-			return false;
-
-		});
-		
-		$textBox.blur (function () { $textBox.remove(); });
-		$textBox.click(function () { return false; });
-
-	}
-
-
-	/*
-	 * Collapse a nesting node
-	 *
-	 */
-
-	function collapseThis (_event) {
-		
-		var $this	= $(this).parent(),
-			id		= $this.attr('id');
-
-
-		$this.toggleClass('collapse');  
-
-		//metaTree.fold(id);
-
-		_event.preventDefault();
-		return false;
 	
-	}
-
-
 
 	/*
 	 * Move Cursor
@@ -592,8 +669,9 @@ var JsonTree = function (_host) {
 
 
 	return {
-		build	: build,
-		command : newCommand
+		build		: build,
+		moveCursor	: moveCursor,
+		command 	: newCommand
 	};
 
 };

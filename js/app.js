@@ -15,12 +15,16 @@ var RapidJsonApp = function () {
 		// Host element
 		$host		= $("#json"),
 
+		// Menu panel
+		$menu		= $("menu"),
+
 		// Json tree object - handles all the node operations
 		jsonTree	= new JsonTree("#json"),
 
 		// padding constant for calculating UI panel widths
 		padding		= 20;
 	
+
 
 
 
@@ -33,9 +37,20 @@ var RapidJsonApp = function () {
 
 	function menuAction (_actionName) {
 
-
+		console.log(_actionName);
 
 	}
+
+	$menu.click(function (_e) {
+
+		var $this = $(_e.target);
+
+		if ($this.hasClass('button')) {
+			menuAction( $this.data('value') );
+		}
+
+	});
+
 
 
 
@@ -180,10 +195,8 @@ var RapidJsonApp = function () {
 	*/
 
 	// Click to select
-	$("#json .node").live('click', function(_evt) { moveCursor($(this)); _evt.preventDefault(); return false; });
+	$("#json .node").live('click', function(_evt) { jsonTree.moveCursor($(this)); _evt.preventDefault(); return false; });
 
-	// Menu options
-	$("menu .button").click(function () { setOption($(this)); });
 
 	// Window resize
 	$(window).resize(onResize);
