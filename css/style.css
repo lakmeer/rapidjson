@@ -403,6 +403,7 @@ menu .panel:last-child  { border-right: 0px none; }
 		-1px -1px  0px 0px rgba(  0,   0,   0, 0.2); 
 }
 
+.name.modify input { margin-left: 1em; }
 
 
 /* Selection Cursor */

@@ -57,6 +57,12 @@ var JsonTree = function (_host) {
 
 				$this.children('.value').html('{<span class="ellipsis"> . . . }</span>');
 		
+				break;
+
+			case "array":
+
+				$this.children('.value').html('[<span class="ellipsis"> . . . ]</span>');
+				
 				$this.children('.node').each(function (_i) {
 
 					var $thisChild	= $(this),
@@ -68,18 +74,19 @@ var JsonTree = function (_host) {
 
 				break;
 
-			case "array":
-
-				$this.children('.value').html('[<span class="ellipsis"> . . . ]</span>');
-				
-
-				break;
-
 			case "true":
 			case "false":
 			case "null":
 
 				$this.children(".value").html('<span class="icon">' + _newType + '</span>');
+
+			case "string":
+			case "number":
+
+				if ($this.children(".node").length > 1) { 
+					$this.children(".node").remove();
+				}
+
 				break;
 
 			default:
@@ -356,13 +363,13 @@ var JsonTree = function (_host) {
 			case "editNextField":
 			case "editValue":
 
-				editValue();
+				edit('value');
 				break;
 			
 			case "editPrevField":
 			case "editName":
 
-				editName();
+				edit('name');
 				break;
 			
 			// Node
@@ -462,14 +469,14 @@ var JsonTree = function (_host) {
 
 	/*
 	 *
-	 * Edit-by-text entry
+	 * Edit-by-text-entry
 	 *
 	 * Editing either the key or value parts has thier own special considerations for
 	 * automagic type conversion and so on, so they are split into 2 functions.
 	 *
-	 * Some repetition here but really didn't like having one bit monolithic function
+	 * Some repetition here but really didn't like having one big monolithic function
 	 * with loads of branches in it, so split it at the cost of repetitiveness, but 
-	 * may look at drying these up later on.
+	 * will look at drying these up later on.
 	 *
 	 */
 
@@ -485,10 +492,10 @@ var JsonTree = function (_host) {
 	 */
 
 
-	function editName () {
+	function edit (_type) {
 
 		// Get jq reference, create new textbox
-		var $this		= $cursor.children(".name"),
+		var $this		= $cursor.children("." + _type),
 			$textBox	= $("<input type='text' />").val($this.text());
 
 		// Attach
@@ -498,36 +505,72 @@ var JsonTree = function (_host) {
 		// Suspend keyboard
 		Keyboard.pause();
 
-		// save value, carry out implicit operations
-		function save () {
-			
-			var newName			= $textBox.val(),
-				inferredType	= inferType(newName);
+
+
+		/*
+		 * Some methods
+		 *
+		 */
+		
+		// save for name fields
+		function saveName (_newName, _inferredType) {
 
 			// If parent is an array and new name is a string, force parent to be object
-			if ( inferredType !== 'number'	&&	$cursor.parent().hasClass('array') ) {
-
-				console.log("Parent is an array but name is a string -> convert of to object");
+			if ( _inferredType !== 'number' && $cursor.parent().hasClass('array') ) {
 
 				changeInto($cursor.parent(), 'object');
 
 			// If parent is array and new value is still a number, reorder elements based on new key values
 			} else if ( $this.parent().hasClass('array') ) {
 
-				$this.text($textBox.val());
+				$this.text(_newName);
 
-				console.log("Parent is an array and name is numeric -> reorder array for new numbering");
+				numericSort($this);
 
 			} else {
 
 				// Save value
-				$this.text($textBox.val());
+				$this.text(_newName);
 
 			}
 
 			// Close box
 			close();
 			
+		}
+
+		// save for value fields
+		function saveValue (_newValue, _inferredType) {
+
+			// Force new type based on type detection
+			changeInto($cursor, 'object');
+
+			// Save value
+			$this.text(_newValue);
+			
+			// Close box
+			close();
+
+			// Resume keyboard interface
+			Keyboard.resume();
+	
+		}
+
+		// general save function
+		function save () {
+
+			var newValue		= $textBox.val(),
+				inferredType	= inferType(newValue);
+
+			if (_type === "name") {
+
+			   saveName(newValue, inferredType); 
+
+			} else { 
+
+				saveValue(newValue, inferredType); 
+			}
+
 		}
 
 		// close text entry box 
@@ -554,14 +597,26 @@ var JsonTree = function (_host) {
 			} else if (_key.keyCode === 9 && _key.shiftKey) {
 
 				save();
-				newCommand('moveToPrevAnything');
+				
+				if (_type !== 'value') { 
+					
+					newCommand('moveToPrevAnything'); 
+				
+				}
+
 				newCommand('editName');
 			
 			// Tab (next)
 			} else if (_key.keyCode === 9) {
 
 				save();
-				newCommand('moveToNextAnything');
+
+				if (_type !== 'value') {
+
+					newCommand('moveToNextAnything');
+
+				}
+
 				newCommand('editValue');
 
 			// Escape (cancel)
@@ -580,6 +635,14 @@ var JsonTree = function (_host) {
 
 		}
 
+
+
+
+		/*
+		 * Some listeners
+		 *
+		 */
+
 		// Bind key listener	
 		$textBox.bind('keydown', filterKeyPresses);
 
@@ -591,7 +654,49 @@ var JsonTree = function (_host) {
 
 	}
 
+	/*
+	 * editValue
+	 *
+	 * Considerations for values:
+	 *
+	 * Coerce node type for new value
+	 * If going from nested node to non-nesting, delete all children
+	 *
+	 */
+	
+	function editValue () { 
 
+
+
+
+	}
+
+
+	/*
+	 * Create text-entry box on some field
+	 *
+	 */
+
+	function createTextBox (_target, _saveCallback) {
+
+		var $this	= $(_target),
+			$box	= $("<input type='text' />").val( $this.text() );
+
+		$box.bind('keydown', function (_key) { });
+
+
+		return {
+
+			box		: $box,
+
+			save	: function () { $this.text($textBox.val()); },
+
+			close	: function () {  }
+
+		}
+
+	}
+							
 
 
 	/*
