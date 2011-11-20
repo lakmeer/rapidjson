@@ -259,15 +259,16 @@
 
 		<script>
 
+			var rawJson = '{"name":"Dictionary - Grammar","id":"0","img":[0,0],"sym":"","icons":{"1":{"name":"Compound Builder","id":"1","sym":"","icons":{}},"2":{"name":"Equal","id":"2","sym":"=","img":[5,2],"icons":{"1":{"name":"Less or Equal","id":"2.1","sym":"&le;","img":[1,2]},"2":{"name":"Not Equal","id":"2.2","sym":"&ne;","img":[2,2]},"3":{"name":"Greater or Equal","id":"2.3","sym":"&ge;","img":[3,2]},"4":{"name":"Less Than","id":"2.4","sym":"&lt;","img":[4,2]},"6":{"name":"Greater Than","id":"2.6","sym":"&gt;","img":[6,2]},"7":{"name":"Much Less","id":"2.7","sym":"&lt;&lt;","img":[7,2]},"8":{"name":"Approximately","id":"2.8","sym":"&asymp;","img":[8,2]},"9":{"name":"Much Greater","id":"2.9","sym":"&gt;&gt;","img":[9,2]}}},"3":{"name":"Plus","id":"3","sym":"+","icons":{"1":{"name":"","id":"3.1","sym":""},"3":{"name":"","id":"3.3","sym":""},"4":{"name":"","id":"3.4","sym":""},"6":{"name":"","id":"3.6","sym":""},"7":{"name":"","id":"4.7","sym":""},"8":{"name":"","id":"4.8","sym":""},"9":{"name":"","id":"4.9","sym":""}}},"4":{"name":"Verb Arrow Right","id":"4","sym":"&rarr;","img":[6,4],"icons":{"1":{"name":"Left Conditional","id":"4.1","sym":"&lt;|","img":[1,4]},"3":{"name":"Right Conditional","id":"4.3","sym":"|&gt;","img":[3,4]},"4":{"name":"Verb Arrow Left","id":"4.4","sym":"&larr;","img":[4,4]},"5":{"name":"Verb Arrow Reflex","id":"4.5","sym":"&harr;","img":[5,4]},"6":{"name":"Verb Arrow Right","id":"4.6","sym":"&rarr;","img":[6,4]},"7":{"name":"Motion Arrow Left","id":"4.7","sym":"&lArr;","img":[7,4]},"8":{"name":"Verb Arrow Reflex","id":"4.8","sym":"&hArr;","img":[8,4]},"9":{"name":"Verb Arrow Right","id":"4.9","sym":"&rArr;","img":[9,4]}}},"5":{},"6":{"name":"Tense","id":"6","sym":"&bull;","icons":{"1":{"name":"Past Complete","id":"6.1","sym":"<del>&bull;|</del>","img":[1,6]},"2":{"name":"Complete","id":"6.2","sym":"<del>|</del>","img":[2,6]},"3":{"name":"Future Complete","id":"6.3","sym":"<del>|&bull;</del>","img":[3,6]},"4":{"name":"Past","id":"6.4","sym":"<del>&bull;&ensp;</del>","img":[4,6]},"5":{"name":"Present","id":"6.5","sym":"<del>&emsp;</del>","img":[5,6]},"6":{"name":"Future","id":"6.6","sym":"<del>&nbsp;&bull;</del>","img":[6,6]},"7":{"name":"Past Progressive","id":"6.7","sym":"<del>&bull;&gt</del>","img":[7,6]},"8":{"name":"Progressive","id":"6.8","sym":"<del>&gt;&ensp;</del>","img":[8,6]},"9":{"name":"Future Progressive","id":"6.9","sym":"<del>&gt;&bull;</del>","img":[9,6]}}},"7":{"name":"Quantifier","id":"7","sym":"Q","icons":{"1":{"name":"Quantity: 1/8","id":"7.1","sym":"&frac18;","img":[1,7]},"2":{"name":"Quantity: 1/4","id":"7.2","sym":"&frac14;","img":[2,7]},"3":{"name":"Quantity: 3/8","id":"7.3","sym":"&frac38;","img":[3,7]},"4":{"name":"Quantity: 1/2","id":"7.4","sym":"&frac12;","img":[4,7]},"5":{"name":"Quantity: 5/8","id":"7.5","sym":"&frac58;","img":[5,7]},"6":{"name":"Quantity: 3/4","id":"7.6","sym":"&frac34;","img":[6,7]},"7":{"name":"Quantity: 7/8","id":"7.7","sym":"&frac78;","img":[7,7]},"8":{"name":"Quantity: 1/1","id":"7.8","sym":"1","img":[8,7]},"9":{"name":"Quantity: zero","id":"7.9","sym":"0","img":[9,7]}}},"8":{"name":"Preposor","id":"8","sym":":","icons":{"4":{"name":"Possessor","id":"8.4","sym":"&#92;"},"8":{"name":"Descriptor","id":"8.6","sym":"~"},"7":{"name":"Emphasisor","id":"8.7","sym":"!"},"8":{"name":"Locator","id":"8.8","sym":"@"},"9":{"name":"Separator","id":"8.9","sym":","}}},"9":{"name":"Unknown","id":"9","sym":"?","icons":{"1":{"name":"Possessor","id":"9.1","sym":"x1"},"2":{"name":"Descriptor","id":"9.2","sym":"x2"},"3":{"name":"Emphasisor","id":"9.3","sym":"x3"},"4":{"name":"Locator","id":"9.4","sym":"here"},"6":{"name":"Locator","id":"9.6","sym":"now"},"8":{"name":"Separator","id":"9.8","sym":"&lowast;"}}}}}';
 			
 			var testJson = {
 
-				"Andy"		: { "A1" : "String One", "A2" : 345, "A3" : [0, 1, 1, 2, 3, 5, 8, 13, 21] },
+				"Andy"		: { "A1" : "String One", "A2" : 345, "A3" : [0, 1, 1, 2, 3, 5, 7] },
 				"Barry"		: "String Two",
 				"Charlie"	: 1024,
-				"Danny"		: [0, 1, 2, 3],
+				"Danny"		: [0, 1, 2, 3, 4, 5, 6, 7],
 				"Eddie"		: { "E1" : { "E2" : { "E3" : { "E4" : { "E5" : { "E6" : { "E7" : {}  }}}}}, "E12" : { "E121" : { "E1211" : 0 } } }, "E2" : { "E21" : "" } },
-				"Freddie"	: [ { "F1" : "XXX" }, [ "YYY" ], "ZZZ" ],
+				"Freddie"	: [ { "F1" : "XXX" }, ["YYY", "ZZZ"], 512, "String Five"],
 				"Gary"		: null,
 				"Harry"		: true,
 				"Ivan"		: false,
@@ -288,11 +289,6 @@
 		</script>
 
 		<!-- Load various components -->
-
-		<!--
-		<script src="js\domsole.js"  ></script>
-		<script src="js\jsontree.js" ></script>
-		-->
 
 		<!-- App Framework -->
 		<script src="js/functions.js"></script>

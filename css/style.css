@@ -12,7 +12,6 @@ html {
 }
 
 body { 
-	overflow-y: scroll; 
 	height: 100%;
 	padding: 20px;
 }
@@ -44,8 +43,6 @@ ul { margin: 0px 20px; }
 }
 
 header { display: none; }
-
-
 
 
 
@@ -93,7 +90,6 @@ header { display: none; }
 
 
 
-
 /* Information panel */
 
 #info { 	
@@ -101,6 +97,7 @@ header { display: none; }
 	display: block;
 	overflow-x: hidden;
 	overflow-y: scroll;
+
 }
 
 #info section { display: none; }
@@ -109,13 +106,8 @@ header { display: none; }
 
 #info section.show { display: block; } 
 
-#info ul { list-style: outside; }
+#info ul { list-style: inside; }
 #info hr { height: 0px; border: 0px none; border-top: 1px solid; }
-
-#info ul strong { display: inline-block; text-align: right; width: 155px; }
-
-
-
 
 /* JSON Display */
 
@@ -150,6 +142,7 @@ header { display: none; }
 .node			{ }
 .node > span 	{ white-space: nowrap; }
 .node > .value	{ }
+
 .node > .node   { padding-left: 1em; }
 
 
@@ -161,7 +154,6 @@ header { display: none; }
 .node.number	> .value, span.number { font-style:  italic; }
 
 .object > .node, .array > .node { padding-left: 21px; }
-
 
 
 
@@ -372,7 +364,6 @@ textarea {
 
 
 
-
 /* Rainbow Coding */
 
 .rainbow .selected.red	 	{ background: rgba(255,  50,  50, 0.1); }
@@ -391,7 +382,6 @@ textarea {
 .rainbow .cyan	 > .name:before, .rainbow .cyan		> .name:after { color: rgba( 50, 255, 255, 1); }
 .rainbow .blue	 > .name:before, .rainbow .blue		> .name:after { color: rgba( 50,  50, 255, 1); }
 .rainbow .purple > .name:before, .rainbow .purple	> .name:after { color: rgba(180,  50, 255, 1); }
-
 
 ::selection { background: rgba(255, 255, 255, 0.3); }
 

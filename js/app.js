@@ -1,5 +1,4 @@
 
-
 var App = function () {
 
 
@@ -270,7 +269,6 @@ var App = function () {
 
 
 
-
 	//
 	// EXPORT PHASE
 	//
@@ -315,7 +313,3 @@ var App = function () {
 	}
 
 }();
-
-
-
-
