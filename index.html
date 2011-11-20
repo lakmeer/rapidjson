@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html class="style-carbonfibre">
+	<head>
+		<title>Rapid JSON - a tool for rapid authoring of large javascript objects</title>
+		<link rel="stylesheet" href="css/style.css" />
+		<!-- script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script -->
+		<script src="js/lib/jquery.min.js"></script>
+	</head>
+	<body class="style-carbonfibre">
+		<header>
+
+			<div class="header ">
+				<h1 class="style-letterpress">Rapid JSON</h1>
+				<h2 class="style-talltext">v0.1</h2>				
+			</div>
+			<div>
+				<div class="action"		data-value="new">New</div>
+				<div class="action"		data-value="paste">Paste JSON</div>
+				<div class="action"		data-value="export">Export to JSON</div>
+				<div class="button on"	data-value="win">Windows Style</div>
+				<div class="button"		data-value="mac">MacOS X Style</div>
+				<div class="button"		data-value="vim">ViM Style</div>
+				<div class="button on"	data-value="console">Console</div>
+				<div class="button on"	data-value="infopanel">Info Panel</div>
+				<div class="button"		data-value="livetree">Live JSON</div>
+				<div class="button"		data-value="colorinvert">Invert Colors</div>
+				<div class="button on"	data-value="rainbowcode">Rainbow Coding</div>
+				<div class="button on"	data-value="typeguessing">Typeguessing</div>
+				<div class="button on"	data-value="general">General Help</div>
+				<div class="button"		data-value="keymap">Current Keymap</div>
+				<div class="button"		data-value="features">Feature List</div>
+			</div>
+
+		</header>
+
+		<div id="main">
+
+			<div id="console" class="style-screen"><input type="text" /></div>
+			<div id="json"    class="style-inset rainbow"><div class="editor"></div></div>
+
+			<div id="info" class="side style-inset">
+
+				<section id="help" class="show">
+
+					<h3>Welcome to Rapid Json</h3>
+					<hr />
+
+					<p>Rapid Json is a tool for <em>fast</em> authoring or editing of heirarchical data. Before you start, you should have read up on the JSON spec at <a href="http://www.json.org" target="_blank">json.org</a>.</p>
+					<p>It's creation is motivated because plain-text editing of XML or JSON structures is tedious and painful, and existing editors are slow, mouse-heavy or clunky to use. This tool aims to be slick, fast, and flexible, to make working with heirarchical data fun and fluid.</p>
+					<p>This tool is pre-alpha; I would love bug reports, missing features, oversights, pull requests, ideas, feedback and criticism - please lodge such at this project's <a href="http://github.com/lakmeer/rapidjson">Github page</a>.</p>
+
+					<hr />
+					<h3>What's going on?</h3>
+					<ul>
+						<li>The field on the left is the data editor. </li>
+						<li>The 'cursor' is represented by that grey bar. Click some nodes to see it.</li>
+						<li>If there's a big-ass left-brace on the screen that means the <em>root node</em> is selected.</li>
+						<li>The root node is usually invisible, because you can't modify it, but you can select it by using the 'parent' motion on any top-level node.</li>
+						<li>The rainbow colours are there to help you tell what tier of the heirarchy you're working on.</li>
+						<li>The bar at the top wil be a command line. It doesn't work yet.</li>
+					</ul>
+
+					<hr />
+					<h3>How do I use it?</h3>
+
+					<p>
+						Until the command-line is implemented, interface with your data with keyboard hotkeys. Here are some basics to get you started. Try them out on the sample data in the editor.
+					</p>
+
+					<p>
+						<strong>Up/Down   </strong> : move cursor up and down<br />
+						<strong>Left/Right</strong>	: move cursor parent/child<br />
+						<strong>Enter	  </strong> : change node value<br />
+						<strong>Tab		  </strong> : change node name<br />
+						<strong>Ctrl-Enter</strong> : add child to this node<br />
+						<strong>Space     </strong> : fold<br />
+						<br />
+						<strong>Ctrl-N    </strong> : clear all data and start fresh<br />
+						<strong>Ctrl-O    </strong> : paste some JSON to load into the editor<br />
+						<strong>Crtl-S    </strong> : export your editor data as a JSON string<br />
+						<br />
+						Hit <strong>Ctrl-K</strong> for the full list.<br />
+						Hit <strong>Ctrl-H</strong> at any time to get this help text back.
+					</p>
+
+					<hr />
+					<h3>Future Development</h3>
+					<p>Although this tool is called Rapid 'JSON', it is intended that is may be used to create generic heirarchical data. As such, in future is will have export modes for XML, YAML, and as many common formats of heirarchical data as I can manage.</p>
+					<p>Next to be implemented are:
+						<ul>
+							<li>Copy &amp; Paste</li>
+							<li>Undo, redo and repeat</li>
+							<li>Node swap</li>
+							<li>Templating</li>
+						</ul>
+						See Development Map panel for more info (<strong>Ctrl-D</strong>).
+					</p>
+				
+					<hr />	
+					<h3>Things to know</h3>
+					<p>
+						Styles are currently only configured for Webkit. Firefox coming shortly. 
+						Most of the code still generates a lot of debug output as console calls, 
+						so if it's not working try running it with your console open so they don't
+						get suppressed.
+					</p>
+
+					<p>Also, when adding nodes or editing values you can type any valid JSON construct and the app will interpret it for you. Try selecting a node, editing by pressing <strong>Enter</strong>, and then copy-pasting <blockquote>{ "thousand" : 1000, "million" : 1000000 }</blockquote> to see this working.</p>
+
+					<hr />
+					<h3>Tips for more advanced stuff</h3>
+					<ul>
+						<li><strong>Shift-Tilde</strong> to switch true/false and string/number</li>
+						<li>Jump straight to the root with <strong>Ctrl-Shift-Left</strong></li>
+						<li>Force string input by leading with a double-quote (")</li>
+						<li>You can use floating point scientific number notation (1e+23, etc)</li>
+						<li>Number keys skip to <em>n</em>th sibling. Hold <strong>shift</strong> for <em>n</em> child.</li>
+					</ul>
+
+					<p>Happy Hacking</p>
+
+				</section>
+
+				<section id="devmap">
+					<h3>Development Map</h3>
+
+					<hr />
+
+					<h4>Todo</h4>
+					<ul>
+						<li>Natural scrolling</li>
+						<li>Command line entry
+							<ul>
+								<li>Centralise all of this through command line system</li>
+							</ul>
+						</li>
+						<li>Search</li>
+						<li>Auto Search-and-replace</li>
+						<li>Collection objects</li>
+					
+						<li>History
+							<ul>	
+								<li>Undo</li>
+								<li>Repeat</li>
+							</ul>
+						</li>
+						<li>Templating</li>
+						<li>Custom keymapping config</li>
+						<li>Better feedback dialogs</li>
+						<li>Localstorage</li>
+						<li>Memory
+							<ul>
+								<li>Copy &amp; Paste</li>
+								<li>Registers?</li>
+								<li>Display memory contents</li>
+							</ul>
+						</li>
+
+						<li>Info Panel Content
+							<ul>
+								<li>Help Text</li>
+								<li>Hotkey list</li>
+								<li>CLI command list</li>
+								<li>CLI command syntax guide</li>
+								<li>Broswe templates</li>
+								<li>Live JSON Tree</li>
+							</ul>
+						</li>
+						
+						<li>Multiple node selection handling</li>
+
+					</ul>
+					<hr />
+					<h4>Done</h4>
+					<ul>
+
+					</ul>
+
+				</section>
+				<section id="hotkeys" class="">
+					<h3>Available Commands</h3>
+					<p>Remember some of these may be broken or not implemented yet. Bug reports welcome at the <a href="http://github.com/lakmeer/rapidjson">Github page</a>.</p>
+					<hr />
+					<ul style="list-style:none;">
+
+						<li> <strong>left</strong>			  : Move to Parent </li>
+						<li> <strong>right</strong>			  : Move to First Child </li>
+						<li> <strong>up</strong>			  : Move to Prev Anything </li>
+						<li> <strong>down</strong>			  : Move to Next Anything </li>
+						<br />
+						<li> <strong>ctrl-up</strong>		  : Move to Prev Sibling </li>
+						<li> <strong>ctrl-down</strong>		  : Move to Next Sibling </li>
+						<li> <strong>ctrl-left</strong>		  : Move to Oldest Ancestor </li>
+						<li> <strong>ctrl-right</strong>	  : Move to Newest Descendant </li>
+						<br />
+						<li> <strong>ctrl-shift-left</strong> : Jump to Root </li>
+						<br />
+						<li> <strong>pgup</strong>			  : Jump to Absolute First </li>
+						<li> <strong>pgdn</strong>			  : Jump to Absolute Last </li>
+						<li> <strong>home</strong>			  : Jump to First Sibling </li>
+						<li> <strong>end</strong>			  : Jump to Last Sibling </li>
+						<br />
+						<li> <strong>1 - 9</strong>			  : Jump to <em>Nth</em> Sibling</li>
+						<li> <strong>shift-1 - 9</strong>	  : Jump to <em>Nth</em> Child </li>
+						<li> <strong>ctrl-1 - 9</strong>	  : Jump to <em>Nth</em> Generation </li>
+						<br />
+						<li> <strong>space</strong>			  : foldThis </li>
+						<li> <strong>ctrl-space</strong>	  : foldAll - <em>BROKEN</em></li>
+						<br />
+						<li> <strong>return</strong>		  : editValue </li>
+						<li> <strong>tab</strong>			  : editName </li>
+						<li> <strong>shift-tab</strong>		  : editPrevField </li>
+						<li> <strong>kp_add</strong>		  : +1 - <em>numbers only</em> </li>
+						<li> <strong>kp_subtract</strong>	  : -1 - <em>numbers only</em> </li>
+						<li> <strong>shift-kp_add</strong>	  : +10 - <em>numbers only</em> </li>
+						<li> <strong>shift-kp_minus</strong>  : -10 - <em>numbers only</em></li>
+						<br />
+						<li> <strong>shift-tilde</strong>	  : Toggle Type </li>
+						<br />
+						<li> <strong>shift-return</strong>	  : insert Sibling After </li>
+						<li> <strong>insert</strong>		  : insert Sibling Before </li>
+						<br />
+						<li> <strong>ctrl-return</strong>	  : new Child Node </li>
+						<li> <strong>ctrl-shift-return</strong> : new Child node (last) </li>
+						<br />
+						<li> <strong>delete</strong>		  : Delete (one node) </li>
+						<li> <strong>ctrl-delete</strong>	  : Empty (del children) </li>
+						<li> <strong>ctrl-shift-del</strong>  : Isolate (del siblings) </li>
+						<li> <strong>backspace</strong>		  : Prune (delete prev sib) </li>
+
+						<li> <strong>ctrl-shift-up</strong>	  : swap With Prev - <em>not yet</em></li>
+						<li> <strong>crtl-shift-down</strong> : swap With Next - <em>not yet</em></li>
+						<br />
+						<!--
+						<li> <strong></strong>				  : forceTypeString </li>
+						<li> <strong></strong>				  : forceTypeNumber </li>
+						<li> <strong></strong>				  : forceTypeObject </li>
+						<li> <strong></strong>				  : forceTypeArray </li>
+						<li> <strong></strong>				  : forceTypeBoolean </li>
+						<li> <strong></strong>				  : forceTypeNull </li>
+						-->
+
+						<li> <strong>ctrl-S</strong>			: Save data (export) </li>
+						<li> <strong>ctrl-N</strong>			: New (clear editor) - <em>BROKEN</em></li>
+						<li> <strong>ctrl-O</strong>			: Paste (edit from string) </li>
+						<li> <strong>ctrl-K</strong>			: Show info: Hotkeys </li>
+						<li> <strong>ctrl-D</strong>			: Show info: Dev Map </li>
+						<li> <strong>ctrl-H</strong>			: Show info: Help </li>
+						<br />
+						<li> <strong>ctrl-P</strong>			: Print node (console.log) </li>
+						<li> <strong>ctrl-shift-P</strong>		: Print node (verbose) </li>
+
+					</ul>
+		
+				</section>
+			</div>
+	
+		</div>
+
+		<script>
+
+			
+			var testJson = {
+
+				"Andy"		: { "A1" : "String One", "A2" : 345, "A3" : [0, 1, 1, 2, 3, 5, 8, 13, 21] },
+				"Barry"		: "String Two",
+				"Charlie"	: 1024,
+				"Danny"		: [0, 1, 2, 3],
+				"Eddie"		: { "E1" : { "E2" : { "E3" : { "E4" : { "E5" : { "E6" : { "E7" : {}  }}}}}, "E12" : { "E121" : { "E1211" : 0 } } }, "E2" : { "E21" : "" } },
+				"Freddie"	: [ { "F1" : "XXX" }, [ "YYY" ], "ZZZ" ],
+				"Gary"		: null,
+				"Harry"		: true,
+				"Ivan"		: false,
+				"Jamie"		: {}
+			}
+
+			var tinyJson = {
+				"nul" : null,
+				"fal" : false,
+				"tru" : true,
+				"num" : 1024,
+				"str" : "abc",
+				"arr" : [0, 1],
+				"obj" : { "a" : "x" }
+			}	
+
+
+		</script>
+
+		<!-- Load various components -->
+
+		<!--
+		<script src="js\domsole.js"  ></script>
+		<script src="js\jsontree.js" ></script>
+		-->
+
+		<!-- App Framework -->
+		<script src="js/functions.js"></script>
+
+		<!-- App Components -->
+		<script src="js/node.js"    ></script>
+		<script src="js/cursor.js"  ></script>
+		<script src="js/int.js"     ></script>
+		<script src="js/handler.js" ></script>
+		<script src="js/keyboard.js"></script>
+		<script src="js/domsole.js" ></script>
+
+		<script src="js/app.js"></script>
+
+		<script>
+
+			$(function () {
+
+				App.init();
+	
+				App.file.load(JSON.stringify(testJson));
+
+			});
+		
+		</script>
+
+	</body>
+
+</html>
+
+
+
