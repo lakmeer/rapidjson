@@ -7,27 +7,22 @@ or clunky to use. This tool aims to be slick, fast, and flexible, to make workin
 data fun and fluid. This tool is pre-alpha; I would love bug reports, missing features, oversights,
 pull requests, ideas, feedback and criticism - please lodge such at this project's Github page.
 
-
-
-###	How do I use it?
+### How do I use it?
 
 Until the command-line is implemented, interface with your data with keyboard hotkeys. 
 Here are some basics to get you started. Try them out on the sample data in the editor.  
 
 * Up/Down    : move cursor up and down
 * Left/Right : move cursor parent/child
-* Enter	   	 : change node value
-* Tab		 : change node name
+* Enter	     : change node value
+* Tab	     : change node name
 * Ctrl-Enter : add child to this node
 * Space      : fold
- 
 * Ctrl-N     : clear all data and start fresh
 * Ctrl-O     : paste some JSON to load into the editor
 * Crtl-S     : export your editor data as a JSON string
-
-* Hit *Ctrl-K* for the full list.
-* Hit *Ctrl-H* at any time to get the help text back.
-
+* Hit _Ctrl-K_ for the full list.
+* Hit _Ctrl-H_ at any time to get the help text back.
 
 ### Future Development
 
@@ -53,16 +48,15 @@ get suppressed.
 					
 Also, when adding nodes or editing values you can type any valid JSON construct 
 and the app will interpret it for you. Try selecting a node, editing by pressing 
-Enter, and pasting _*{ "thousand" : 1000, "million" : 1000000 }*_ to see this working.
+Enter, and pasting _{ "thousand" : 1000, "million" : 1000000 }_ to see this working.
 
+### Tips for more advanced stuff
 
-#### Tips for more advanced stuff
-
-*Shift-Tilde* to switch true/false and string/number
-Jump straight to the root with *Ctrl-Shift-Left*
+_Shift-Tilde_ to switch true/false and string/number
+Jump straight to the root with _Ctrl-Shift-Left_
 Force string input by leading with a double-quote (")
 You can use floating point scientific number notation (1e+23, etc)
-*Number keys* skip to _nth_ sibling. Hold *shift* for _nth_ child.
+_Number keys_ skip to _nth_ sibling. Hold *shift* for _nth_ child.
 					
 						
-##### Happy Hacking
+## Happy Hacking
