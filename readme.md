@@ -20,18 +20,21 @@ Here are some basics to get you started. Try them out on the sample data in the 
 * Tab		 : change node name
 * Ctrl-Enter : add child to this node
 * Space      : fold
-* 
+ 
 * Ctrl-N     : clear all data and start fresh
 * Ctrl-O     : paste some JSON to load into the editor
 * Crtl-S     : export your editor data as a JSON string
 
-* Hit <strong>Ctrl-K</strong> for the full list.<br />
+* Hit <strong>Ctrl-K</strong> for the full list.
 * Hit <strong>Ctrl-H</strong> at any time to get this help text back.
 
 
 ### Future Development
 
-Although this tool is called Rapid 'JSON', it is intended that is may be used to create generic heirarchical data. As such, in future is will have export modes for XML, YAML, and as many common formats of heirarchical data as I can manage.
+Although this tool is called Rapid 'JSON', it is intended that is may be used to create generic 
+heirarchical data. As such, in future is will have export modes for XML, YAML, and as many common 
+formats of heirarchical data as I can manage.
+
 Next to be implemented are:
 
 * Copy &amp; Paste
