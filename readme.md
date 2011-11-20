@@ -25,8 +25,8 @@ Here are some basics to get you started. Try them out on the sample data in the 
 * Ctrl-O     : paste some JSON to load into the editor
 * Crtl-S     : export your editor data as a JSON string
 
-* Hit <strong>Ctrl-K</strong> for the full list.
-* Hit <strong>Ctrl-H</strong> at any time to get this help text back.
+* Hit *Ctrl-K* for the full list.
+* Hit *Ctrl-H* at any time to get the help text back.
 
 
 ### Future Development
