@@ -252,40 +252,16 @@ Node.prototype = function () {
 	 *
 	 * no parameters
 	 * 
+	 * Note: being careful not to copy self-referential properties like parent,
+	 * or siblings because the cloner is not smart enough.
+	 *
 	 */
 
-	this.clone = function clone(_obj) {
+	this.clone = function clone() {
 
-		var obj = _obj || this;
+		var cloneData = this.raw();
 
-		// Primitive valueless types
-		if (obj == null || typeof obj !== "object") {
-		   return obj;
-		}
-
-		// Arrays
-		if (obj instanceof Array) {
-			var copy = [];
-
-			for (var i = 0, len = obj.length; i < len; ++i) {
-				copy[i] = clone(obj[i]);
-			}
-
-			return copy;
-		}
-
-		// Objects
-		if (obj instanceof Object) {
-			var copy = {};
-
-			for (var attr in obj) {
-				if (obj.hasOwnProperty(attr)) { 
-					copy[attr] = clone(obj[attr]);
-				}
-			}
-
-			return copy;
-		}
+		return new Node(this.name, cloneData);
 
 	}
 
@@ -333,6 +309,8 @@ Node.prototype = function () {
 
 			siblings.splice(index, 1);
 
+			if (this.parent.type === 'array') { this.parent.renumber(); }
+
 			this.parent		= null;
 
 			this.dom.remove();
@@ -340,6 +318,7 @@ Node.prototype = function () {
 			this.setDepth(0);
 
 
+			
 
 		}
 
@@ -383,6 +362,8 @@ Node.prototype = function () {
 	 */
 
 	this.fold = function fold (_which) {
+
+		if (this.children.length < 1) { return this; }
 
 		if (typeof _which == 'undefined') {
 

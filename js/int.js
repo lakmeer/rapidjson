@@ -27,11 +27,66 @@ var Interface = function (cursor) {
 	/*
 	 * Cut-and-paste memory
 	 *
-	 * TODO: Expand on this.
+	 * Memory handler takes nodes, but only stores JSON strings. It automatically
+	 * converts them back to nodes when fetched again.
+	 *
+	 * TODO: Extend this to collections whenever they show up
 	 *
 	 */
 
-	var memory = null;
+	// Tiny singleton to abstract the 'anonymous register' concept a bit
+	var memory = (function () { 
+		
+		var register = {}
+
+		// Generate registers...
+		for (var i = 97; i < 123; i++) { register[String.fromCharCode(i)] = null; } // Named registers
+		register._ = null;		// Anonymous register
+		register.$ = null;		// Swap register
+
+		// Setter
+		this.set = function (_node, _r) {
+
+			var r = _r || '_';
+
+			register[r] = { name : _node.key, value : _node.raw() };
+
+		};
+
+		// Getter
+		this.get = function (_r) {
+
+			var r = _r || '_',
+				x = register[r];
+
+			return new Node(x.name, x.value);
+
+		};
+
+		// Get raw Json string for processing in another context
+		this.getRaw = function (_r) {
+
+			var r = _r || '_';
+
+			return register[r].value();
+
+		}
+
+		// Empty a register
+		this.clear = function (_r) {
+
+			var r = _r || '_';
+
+			register[r] = null;
+
+		}
+
+		return this;
+
+	}());
+
+
+
 
 
 	/*
@@ -108,6 +163,7 @@ var Interface = function (cursor) {
 		"deleteAfterThis"			: { 'types': [ 'all' ],					'refresh': true,		'arity': 0 },
 
 		// Copypasting
+		"cutThis"					: { 'types': [ 'all' ],					'refresh': true,		'arity': 0 },
 		"copyThis"					: { 'types': [ 'all' ],					'refresh': true,		'arity': 0 },
 		"pasteAsThis"				: { 'types': [ 'all' ],					'refresh': true,		'arity': 0 },
 		"pasteIntoThis"				: { 'types': [ 'array', 'object' ],		'refresh': true,		'arity': 0 },
@@ -519,7 +575,7 @@ var Interface = function (cursor) {
 
 					var thisChild = this.children[i];
 
-					thisChild.fold(_which);
+					commandFunctions.foldAll.apply(thisChild, [ _which ]);
 
 				}
 
@@ -806,31 +862,69 @@ var Interface = function (cursor) {
 			// COPY AND PASTE
 			//
 
-			cutThis : function () {
+			/*
+			 * cutThis
+			 *
+			 */
 
-				memory = this.clone();
+			cutThis : function (_r) {
 
-				deleteThis();
+				// Keep in memory in raw form
+				memory.set(this)
 
-			},
-
-			copyThis : function () {
-
-				memory = this.clone();
-
-			},
-
-			pasteAsThis : function (_node) {
-
-				insertSiblingBefore(_node);
-
-				this.kill();
+				// Remove from tree
+				commandFunctions.deleteThis.apply(this);
 
 			},
 
-			pasteIntoThis : function (_node) {
+			/*
+			 * copyThis
+		 	 *
+			 */
+			
+			copyThis : function (_r) {
 
-				insertChildHere(_node);
+				// Keep in memory in raw form
+				memory[_r || '_'] = { name : this.name, value : this.raw() };
+
+			},
+
+			pasteAsThis : function (_r) {
+
+				var fetched = memory.getRaw(_r);
+
+				thisSetValue(fetched);
+
+			},
+
+			pasteAfterThis : function (_r) {
+
+				// Fetch gets back name and raw json string
+				var fetched = memory.get(_r);
+
+				console.log("PasteAfter - Fetched result =", fetched);
+
+				// Loop for collections
+				//for (var i = 0; i < dataArray.length; i++) {
+
+					this.parent.adoptAt(this.getIndex() + 1, fetched);
+
+				//}
+
+			},
+
+			pasteIntoThis : function (_r) {
+
+				var fetched = memory.get(_r);
+
+				console.log("PasteInto - Fetched result =", fetched);
+
+				// Loop for collections
+				//for (var i = 0; i < dataArray.length; i++) {
+
+					this.adoptAt(this.children.length, fetched);
+
+				//}
 
 			},
 
@@ -841,6 +935,11 @@ var Interface = function (cursor) {
 			swapWithNext : function () {
 
 			},
+
+
+
+
+
 
 
 			//

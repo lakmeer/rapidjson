@@ -1,33 +1,22 @@
 /*
  * Cursor
  *
- * Cursor handles interactions between the app proper and and tree of nodes. It does things
+ * Cursor handles interactions between the app proper and the tree of nodes. It does things
  * like monitor which node the cursor is at, which nodes are selected and so on. It uses an
  * event listener to monitor for process requests coming from the app.
  *
- * Most methods in Cursor take DOTTED KEYS (tree queries) as arguments as opposed to Node methods
- * which usually take real nodes.
- *
  * Cursor maintains pointers into the actual Node tree, as well as an ordered list which maps
- * more accurately to what the user sees and interacts with.
+ * more accurately to what the user sees and interacts with. The ordered list is also used to 
+ * make searching over the data more efficient and to make more sense.
  *
- * Cursor has the subclass Cursor, which has it's own methods.
- *
- *
- * Properties:
- *
- * cursor			- pointer to current focused node.
- * root				- pointer to root json node
- * list				- flattened list of nodes for more natural keyboard navigation. 
- * 					  Members of the list are pointers to real tree nodes.
- *
- * Methods:
- *
- *
- * fetch			- runs a query for a dotted key
- * delete			- deletes this node
+ * Cursor also handles selection, and the creation of collections of multiple nodes that aren't 
+ * related in direct genealogical ways.
  *
  */
+
+
+
+
 
 
 var Cursor = function (_root) {
@@ -337,6 +326,11 @@ var Cursor = function (_root) {
 		this.moveTo(root);
 
 	}
+
+
+
+
+
 
 
 	/*

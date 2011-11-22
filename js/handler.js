@@ -70,7 +70,12 @@ var Handler = function (_interface) {
 			'shift-kp_add'      : { name : 'editIncrement',          args : [ 10 ] },
 			'shift-kp_subtract' : { name : 'editDecrement',          args : [ 10 ] },
 
-			'shift-tilde'		: { name : 'editTypeToggle', 		 args : [] },
+			'shift-tilde'       : { name : 'editTypeToggle', 		 args  : [] },
+
+			// Copy & Paste
+			'ctrl-X'            : { name : 'cutThis',                args : [] },
+			'ctrl-C'            : { name : 'copyThis',               args : [] },
+			'ctrl-V'            : { name : 'pasteIntoThis',          args : [] },
 
 			// Nodes
 			'shift-return'      : { name : 'insertSiblingAfter',     args : [] },

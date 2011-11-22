@@ -32,7 +32,7 @@ Here are some basics to get you started. Try them out on the sample data in the 
 ### Future Development
 
 Although this tool is called Rapid 'JSON', it is intended that is may be used to create generic 
-heirarchical data. As such, in future is will have export modes for XML, YAML, and as many common 
+heirarchical data. As such, in future I will have export modes for XML, YAML, and as many common 
 formats of heirarchical data as I can manage.
 
 Next to be implemented are:
