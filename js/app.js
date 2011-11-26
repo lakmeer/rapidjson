@@ -48,7 +48,7 @@ var App = function () {
 		components.handler		= new Handler	(components.interface);
 
 		components.console		= new Console	($cli);
-		components.keyboard		= new Keyboard	();
+		components.keyboard		= new Keyboard	(handleKeyEvent);
 
 		$(window).trigger('resize');
 
@@ -251,16 +251,20 @@ var App = function () {
 	 *
 	 */
 
-	document.addEventListener('keyboard', function (_event) {
+	//document.addEventListener('keyboard', 
+							  
+	function handleKeyEvent (_keys) {
 
 		// Get command from key combination
-		var thisCommand = components.handler.interpretKey(_event.keys);
+		//var thisCommand = components.handler.interpretKey(_event.keys);
+		var thisCommand = components.handler.interpretKey(_keys);
 
 		// console.log(" >> " + _event.keys + " -> " + thisCommand.name);
 
 		components.interface.do(thisCommand);
 
-	});
+	}
+	//});
 
 
 

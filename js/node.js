@@ -48,7 +48,7 @@ var Node = function (_key, _value, _parent) {
 
 	// Lineage
 	this.children	= [];
-	this.parent		= null;
+	this.myparent		= null;
 	this.depth		= 0;
 
 	// View
@@ -86,7 +86,7 @@ Node.prototype = function () {
 
 		this.children.push(_child); 
 
-		_child.parent	= this;
+		_child.myparent	= this;
 		_child.siblings = this.children;
 		
 		_child.setDepth(this.depth + 1);
@@ -127,7 +127,7 @@ Node.prototype = function () {
 		this.children.splice(_pos, 0, _child); 
 
 		// Update properties
-		_child.parent	= this;
+		_child.myparent	= this;
 		_child.siblings = this.children;
 		_child.setDepth(this.depth + 1);
 
@@ -302,16 +302,16 @@ Node.prototype = function () {
 
 	this.detach = function detach () {
 
-		if (this.parent !== null) {
+		if (this.myparent !== null) {
 
-			var siblings	= this.parent.children,
+			var siblings	= this.myparent.children,
 				index		= siblings.indexOf(this);
 
 			siblings.splice(index, 1);
 
-			if (this.parent.type === 'array') { this.parent.renumber(); }
+			if (this.myparent.type === 'array') { this.myparent.renumber(); }
 
-			this.parent		= null;
+			this.myparent		= null;
 
 			this.dom.remove();
 
@@ -436,7 +436,7 @@ Node.prototype = function () {
 
 	this.getIndex = function getIndex () {
 
-		return this.parent.children.indexOf(this);
+		return this.myparent.children.indexOf(this);
 
 	}
 
@@ -509,17 +509,17 @@ Node.prototype = function () {
 
 		function addParents (_this) {
 
-			return ((_this.parent) ? addParents(_this.parent) + "." : '') + _this.key;
+			return "LINEAGE DISABLED"; //((_this.myparent) ? addParents(_this.myparent) + "." : '') + _this.key;
 
 		}
 
-		if (!this.parent) {
+		if (!this.myparent) {
 
 			return (_includeSelf) ? this.key : "none";
 
 		} else {
 
-			return addParents( (_includeSelf) ? this : this.parent );
+			return addParents( (_includeSelf) ? this : this.myparent );
 		}
 
 	}

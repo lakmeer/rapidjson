@@ -1,7 +1,11 @@
-function Keyboard () {
+function Keyboard (_eventHook) {
+
+	console.log(_eventHook);
 
 	var	self	= this,
 		ignore	= false;
+
+	var registerKey = _eventHook;
 
 	// Names of keys we want to monitor
 	this.decode = {
@@ -96,7 +100,7 @@ function Keyboard () {
 	 *
 	 */
 
-	document.addEventListener("keydown", function (_key) {
+	document.addEventListener("keydown", function handleKeydown (_key) {
 	
 		if (ignore) { return _key; }
 
@@ -115,12 +119,17 @@ function Keyboard () {
 		if (keyName === "noCommand") { return _key; }
 
 		// Else bind command name to new 'keyboard' event
-		var command = document.createEvent("Event");
-			command.initEvent("keyboard", true, true);
-			command.keys = keyName;
+		//var command = document.createEvent("Event");
+		//	command.initEvent("keyboard", true, true);
+		//	command.keys = keyName;
+
+
+		console.log(k);
 
 		// Fire
-		document.dispatchEvent(command);
+		//document.dispatchEvent(command);
+
+		registerKey(keyName);
 
 		// Eat the eventt
 		_key.preventDefault();

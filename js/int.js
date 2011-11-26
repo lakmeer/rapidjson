@@ -248,7 +248,7 @@ var Interface = function (cursor) {
 				// If this is root, no parent exists
 				if (this.isRoot) { return false; }
 
-				cursor.moveTo(this.parent);
+				cursor.moveTo(this.myparent);
 
 			},
 
@@ -301,14 +301,14 @@ var Interface = function (cursor) {
 			moveToNextSibling : function () {
 
 				// If this is the last sibling, fail
-				if (this.getIndex() >= this.parent.children.length - 1) {
+				if (this.getIndex() >= this.myparent.children.length - 1) {
 
 					return false;
 
 				// Otherwise, go to next sibling
 				} else {
 
-					cursor.moveTo(this.parent.children[this.getIndex() + 1]);
+					cursor.moveTo(this.myparent.children[this.getIndex() + 1]);
 					return true;
 
 				}
@@ -329,7 +329,7 @@ var Interface = function (cursor) {
 
 				} else {
 
-					cursor.moveTo(this.parent.children[this.getIndex() - 1]);
+					cursor.moveTo(this.myparent.children[this.getIndex() - 1]);
 					return true;
 
 				}
@@ -343,7 +343,7 @@ var Interface = function (cursor) {
 
 			moveToFirstSibling : function () {
 
-				cursor.moveTo(this.parent.children[0]);
+				cursor.moveTo(this.myparent.children[0]);
 				return true;
 
 			},
@@ -356,7 +356,7 @@ var Interface = function (cursor) {
 
 			moveToLastSibling : function () {
 
-				cursor.moveTo(this.parent.children[this.parent.children.length - 1 ]);
+				cursor.moveTo(this.myparent.children[this.myparent.children.length - 1 ]);
 				return true;
 
 			},
@@ -469,8 +469,8 @@ var Interface = function (cursor) {
 
 				function upOne (_this) {
 
-					if (_this.parent.isRoot) { return _this; }
-					return upOne(_this.parent);
+					if (_this.myparent.isRoot) { return _this; }
+					return upOne(_this.myparent);
 
 				}
 
@@ -523,7 +523,7 @@ var Interface = function (cursor) {
 				function findRoot (_this) {
 
 					if (_this.isRoot) { return _this; }
-					return findRoot(_this.parent);
+					return findRoot(_this.myparent);
 
 				}
 
@@ -671,26 +671,26 @@ var Interface = function (cursor) {
 			insertSiblingAfter : function () {
 
 				// Adopt - true = manual sibling placement
-				this.parent.adopt(_newNode, true);
+				this.myparent.adopt(_newNode, true);
 
 				// Get index number of this element
-				var currentIx = this.parent.children.indexOf(this);
+				var currentIx = this.myparent.children.indexOf(this);
 
 				// Insert child after this point
-				this.parent.children.splice(currentIx + 1, 0, _newNode);
+				this.myparent.children.splice(currentIx + 1, 0, _newNode);
 
 			},
 
 			insertSiblingBefore : function () {
 
 				// Adopt - true = manual sibling placement
-				this.parent.adopt(_newNode, true);
+				this.myparent.adopt(_newNode, true);
 
 				// Get index number of this element
-				var currentIx = this.parent.children.indexOf(this);
+				var currentIx = this.myparent.children.indexOf(this);
 
 				// Insert child at (before) this point
-				this.parent.children.splice(currentIx, 0, _newNode);
+				this.myparent.children.splice(currentIx, 0, _newNode);
 
 			},
 
@@ -779,9 +779,9 @@ var Interface = function (cursor) {
 			deleteThis : function () {
 
 				// If this is an only child, go to parent.
-				if (this.parent.children.length === 1) {
+				if (this.myparent.children.length === 1) {
 
-					cursor.moveTo(this.parent);
+					cursor.moveTo(this.myparent);
 
 				// If this is the last sibling, go backwards if possible
 				} else if (this.getIndex() >= this.siblings.length - 1) {
@@ -825,12 +825,12 @@ var Interface = function (cursor) {
 			deleteBeforeThis : function () {
 
 				// If only child, return
-				if (this.parent.children.length < 2) { return; }
+				if (this.myparent.children.length < 2) { return; }
 
 				// For zero to here times, delete item 0;
 				for (var i = 0, max = this.getIndex(); i < max; i++) {
 
-					commandFunctions.deleteThis.apply(this.parent.children[0]);
+					commandFunctions.deleteThis.apply(this.myparent.children[0]);
 
 				}
 
@@ -844,12 +844,12 @@ var Interface = function (cursor) {
 			deleteAfterThis : function () {
 
 				// If only child, return
-				if (this.parent.children.length < 2) { return; }
+				if (this.myparent.children.length < 2) { return; }
 
 				// Until this is the last child, delete last child
-				while (this.getIndex() < this.parent.children.length - 1) {
+				while (this.getIndex() < this.myparent.children.length - 1) {
 
-					commandFunctions.deleteThis.apply(this.parent.children[this.getIndex() + 1]);
+					commandFunctions.deleteThis.apply(this.myparent.children[this.getIndex() + 1]);
 
 				}
 				
@@ -907,7 +907,7 @@ var Interface = function (cursor) {
 				// Loop for collections
 				//for (var i = 0; i < dataArray.length; i++) {
 
-					this.parent.adoptAt(this.getIndex() + 1, fetched);
+					this.myparent.adoptAt(this.getIndex() + 1, fetched);
 
 				//}
 
@@ -1196,7 +1196,7 @@ var Interface = function (cursor) {
 			args		= _command.args,
 			info		= commandBank[cmd];
 
-		// console.log("Executing: " + cmd + " with", (args.length) ? args : "no arguments");
+		console.log("Executing: " + cmd + " with", (args.length) ? args : "no arguments");
 
 		// Check command metadata exists
 		if (typeof info === 'undefined') {

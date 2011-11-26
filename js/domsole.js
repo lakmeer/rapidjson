@@ -14,6 +14,28 @@ var Console = function (_console, _cmd) {
 
 	var flashTimer = 0;
 
+	function parseCommand (_cmd) {
+
+		console.log('command:', _cmd);
+
+		// Get components from input string
+		
+		var pairs = {
+		
+
+			with : _cmd.match(/with\s(\w+)/),
+			send : _cmd.match(/send\s(\w+)/),
+			from : _cmd.match(/from\s(\w+)/)
+		
+		
+		};
+
+
+
+
+	}
+
+	// Show a brief message, then deactivate again.
 	function flash (_msg, _color, _duration) {
 
 		// Clear old timeout
@@ -67,6 +89,8 @@ var Console = function (_console, _cmd) {
 	//
 
 	$input.bindKey(27, clear);
+
+	$input.bindKey(13, function () { parseCommand($(this).val()); clear(); });
 
 	$input.focus(function () {
 
