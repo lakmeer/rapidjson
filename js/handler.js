@@ -115,7 +115,11 @@ var Handler = function (_interface) {
 			'ctrl-H'			: { app : 'info',		args : [ "help" ]  	   },
 
 			// Debug output
-			'ctrl-P'			: { name : 'debugPrintCurrent',      args : [] }
+			'ctrl-P'			: { name : 'debugPrintCurrent',      args : [] },
+
+			// Search & Replace
+			'slash'				: { app : 'newSearch',				 args : [] },
+			'N'					: { app : 'nextSearch',			 	 args : [] }
 
 		}
 

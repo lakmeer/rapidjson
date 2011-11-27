@@ -204,14 +204,7 @@ var Interface = function (cursor) {
 	 *
 	 * Now the actual command functions
 	 *
-	 * Set up as self executing cos I like 
-	 * the 'this' way of declaring methods.
-	 *
 	 */
-
-	//
-	// MOVEMENT
-	//
 
 	var commandFunctions = {
 
@@ -1191,12 +1184,13 @@ var Interface = function (cursor) {
 
 	function receiveCommand (_command) {
 
+
 		var target		= cursor.getCurrent(),
 			cmd			= _command.name,
 			args		= _command.args,
 			info		= commandBank[cmd];
 
-		console.log("Executing: " + cmd + " with", (args.length) ? args : "no arguments");
+		// console.log("Executing: " + cmd + " with", (args.length) ? args : "no arguments");
 
 		// Check command metadata exists
 		if (typeof info === 'undefined') {
@@ -1232,6 +1226,7 @@ var Interface = function (cursor) {
 
 		// Apply the command
 		commandFunctions[cmd].apply(target, args);
+
 
 		// Post-execution cleanup
 		if (info.refresh) {

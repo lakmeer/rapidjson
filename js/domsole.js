@@ -30,9 +30,6 @@ var Console = function (_console, _cmd) {
 		
 		};
 
-
-
-
 	}
 
 	// Show a brief message, then deactivate again.

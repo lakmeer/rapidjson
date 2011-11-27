@@ -1,7 +1,5 @@
 function Keyboard (_eventHook) {
 
-	console.log(_eventHook);
-
 	var	self	= this,
 		ignore	= false;
 
@@ -101,7 +99,7 @@ function Keyboard (_eventHook) {
 	 */
 
 	document.addEventListener("keydown", function handleKeydown (_key) {
-	
+
 		if (ignore) { return _key; }
 
 		var k = _key.keyCode;
@@ -122,12 +120,7 @@ function Keyboard (_eventHook) {
 		//var command = document.createEvent("Event");
 		//	command.initEvent("keyboard", true, true);
 		//	command.keys = keyName;
-
-
-		console.log(k);
-
-		// Fire
-		//document.dispatchEvent(command);
+		// document.dispatchEvent(command);
 
 		registerKey(keyName);
 

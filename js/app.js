@@ -35,6 +35,9 @@ var App = function () {
 
 	
 
+	// Current search string
+	var currentSearch = new RegExp();
+
 
 	// 
 	// METHODS
@@ -163,6 +166,31 @@ var App = function () {
 	}
 
 
+	function newSearch () {
+
+		showDialog({ 
+			type : 'text', 
+			fields : [ { name : "search", value : currentSearch } ], 
+			title : "New search:" 
+		}, function (_results) {
+
+			currentSearch = new RegExp(_results[0]);
+
+			components.cursor.getNextMatch(currentSearch);
+
+		});
+
+	}
+
+
+	function nextSearch () {
+	
+		components.cursor.getNextMatch(currentSearch);
+
+	}
+
+
+
 	//
 	// LISTENERS
 	//
@@ -222,7 +250,7 @@ var App = function () {
 
 	}());
 
-
+	
 	/*
 	 * Json region clicked
 	 *
@@ -260,7 +288,6 @@ var App = function () {
 		var thisCommand = components.handler.interpretKey(_keys);
 
 		// console.log(" >> " + _event.keys + " -> " + thisCommand.name);
-
 		components.interface.do(thisCommand);
 
 	}
@@ -294,7 +321,10 @@ var App = function () {
 			save  : save,
 			paste : paste,
 			clear : clear,
-			info  : showInfoPane
+			info  : showInfoPane,
+
+			newSearch : newSearch,
+			nextSearch : nextSearch
 
 		},
 

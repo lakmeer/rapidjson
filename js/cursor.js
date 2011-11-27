@@ -37,6 +37,7 @@ var Cursor = function (_root) {
 	this.moveTo = function (_node) {
 
 		// App.console.log(_node.key);
+		//console.log('moveTo');
 
 		// Remove cursor flag from current location, unless it's lost, cos it doesn't have one)
 		cursor.dom.removeClass('cursor');
@@ -49,7 +50,6 @@ var Cursor = function (_root) {
 
 		// Put flag in new location
 		cursor.dom.addClass('cursor');
-
 
 	}
 
@@ -217,7 +217,6 @@ var Cursor = function (_root) {
 	this.getNext = function next () {
 
 		// If the cursor is on the root node, it's because no user nodes exist. Do nothing.
-
 		var currentIndex = this.indexOf(cursor, foldedList);
 
 		// If indexOf failed, throw an error
@@ -281,21 +280,45 @@ var Cursor = function (_root) {
 	 *
 	 */
 
-	this.getNextMatch = function getNextMatch (_fn) {
+	this.getNextMatch = function getNextMatch (_test) {
 
-		var thisIx   = this.indexOf(_q),
+		var thisIx   = this.indexOf(cursor, list),
 			thisNode = null;
 
-		for (var i = thisIx, max = list.length; i !== thisIx - 1; i++) {
+		if (typeof _test === 'function') { 
 
-			if (i === max) { i = 0; }
+			for (var i = thisIx, max = list.length; i !== thisIx - 1; i++) {
 
-			thisNode = list[i].node;
+				if (i === max) { i = 0; }
+				thisNode = list[i].node;
 
-			if (_fn.apply(thisNode)) { return thisNode; }
+				if (_fn.apply(thisNode)) { return thisNode; }
+
+			}
+	
+		} else {
+
+			// Start at one so we don't hit the current search result first
+			for (var i = 1, max = list.length; i < max; i++) {
+
+				// X is this loop iteration plus offset, wrapping from zero if greater than list length
+				var x = i + thisIx; x = (x >= max) ? x - max : x;
+
+				console.log(x);
+
+				thisNode = list[x].node;
+
+				if (String(thisNode.key).match(_test)) { this.moveTo(thisNode); return; }
+				   
+				if (thisNode.type !== 'object' && thisNode.type !== 'array') { 
+					
+					if (String(thisNode.value).match(_test)) { this.moveTo(thisNode); return; }
+
+				}
+
+			}
 
 		}
-	
 	};
 
 
@@ -326,11 +349,6 @@ var Cursor = function (_root) {
 		this.moveTo(root);
 
 	}
-
-
-
-
-
 
 
 	/*
